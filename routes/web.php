@@ -1,5 +1,6 @@
 <?php
 
+    use App\Models\Progetto;
     use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,4 +22,7 @@
 //        return ['token' => $token->plainTextToken];
 //
 //    });
-
+//Route::get('/test', function (){
+//  $progetto = Progetto::where('nome', 'berninize.com')->with('pjm')->first();
+//  return $progetto->pjm->email;
+//});

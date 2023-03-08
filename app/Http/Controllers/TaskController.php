@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NotificationEmails;
+use App\Mail\TaskAssegnata;
+use App\Mail\TaskDone;
 use App\Models\Cliente;
 use App\Models\Progetto;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -53,7 +57,7 @@ class TaskController extends Controller
                 'progetto_id' => $progetto->id,
                 'priorita' => $priorita ?: 1
             ]);
-
+            Mail::to($developer->email)->send(new TaskAssegnata($task, $progetto));
             if ($progetto){
                 return response()->json([
                     'status' => true,
@@ -61,7 +65,7 @@ class TaskController extends Controller
                     'task' => [
                         'progetto' => $progetto->nome,
                         'task' =>$task->titolo,
-                        'developer' => $developer->nome
+                        'developer' => $developer->name
                     ],
 
                 ],201);
@@ -97,7 +101,7 @@ class TaskController extends Controller
             }
             $currentUser = Auth::user();
 
-            $progetto = Progetto::where('nome', $request->progetto)->first();
+            $progetto = Progetto::where('nome', $request->progetto)->with('pjm')->first();
             $task = Task::where('titolo', $request->task )->first();
 
 
@@ -110,6 +114,7 @@ class TaskController extends Controller
 
             $task->stato = $request->stato;
             $task->save();
+            Mail::to($progetto->pjm->email)->send(new TaskDone($task, $progetto));
             if ($task){
                 return response()->json([
                     'status' => true,
