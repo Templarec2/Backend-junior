@@ -1,8 +1,9 @@
 
 1. Lanciare ambiente docker con Laravel sail
-2. lanciare comando php artisan migrate
-3. Tutti gli utenti hanno come password: password
-4. Nel seeder UserSeeder c'è la lista con gli utenti e i relativi ruoli
+2. lanciare il comando composer update
+3. lanciare comando php artisan migrate
+4. Tutti gli utenti hanno come password: password
+5. Nel seeder UserSeeder c'è la lista con gli utenti e i relativi ruoli
 
 
 Note:
